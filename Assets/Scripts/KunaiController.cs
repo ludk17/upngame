@@ -7,10 +7,12 @@ public class KunaiController : MonoBehaviour
     float defaultVelocityX = 15;
     float currentVelocityX = 0;
     Rigidbody2D rb;
+    GameObject gameManager;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        gameManager = GameObject.Find("GameManager");
 
         Destroy(gameObject, 5);
 
@@ -39,6 +41,8 @@ public class KunaiController : MonoBehaviour
         {
             Destroy(collision.gameObject);
             Destroy(gameObject);
+
+            gameManager.GetComponent<GameManagerController>().AddScore(10);
         }
     }
 }

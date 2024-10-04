@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class PlayerController : MonoBehaviour
 
     private bool gravedadEstaActivada = true;
 
+    private GameObject gameManager;
+    private GameObject playerMessage;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +24,8 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        gameManager = GameObject.Find("GameManager");
+        playerMessage = GameObject.Find("PlayerMessage");
         
     }
 
@@ -74,7 +79,10 @@ public class PlayerController : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.tag == "Enemy") {
             Debug.Log("Colision con Enemigo");
-            // hacer 1
+            gameManager.GetComponent<GameManagerController>().RemoveLife();
+            playerMessage.GetComponent<TextMeshProUGUI>().text = "Ouch!";
+            playerMessage.transform.position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
+            Invoke("HideMessage", 1);
         }
 
         if (collision.gameObject.name == "Coin") {
@@ -85,6 +93,12 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.name == "Finish") {
             // hacer 3
             Debug.Log("Colision con Finish");
+        }
+
+        if (collision.gameObject.tag == "Recollectable") {
+            var gameManagerC = gameManager.GetComponent<GameManagerController>();
+            gameManagerC.AddKunai(3);
+            Destroy(collision.gameObject);
         }
         
     }
@@ -101,6 +115,10 @@ public class PlayerController : MonoBehaviour
             rb.gravityScale = 1;
             gravedadEstaActivada = true;
         }
+    }
+
+    private void HideMessage() {
+        playerMessage.GetComponent<TextMeshProUGUI>().text = "";
     }
 
 }
