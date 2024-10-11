@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class PlayerAttackController : MonoBehaviour
 {
-    public GameObject kunaiPrefab;
-    
+    public GameObject kunaiPrefab;   
     private GameManagerController gameManagerController;
 
     SpriteRenderer sr;
