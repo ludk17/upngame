@@ -18,7 +18,6 @@ public class KunaiController : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         rb.velocity = new Vector2(currentVelocityX, rb.velocity.y);
@@ -44,5 +43,9 @@ public class KunaiController : MonoBehaviour
 
             gameManager.GetComponent<GameManagerController>().AddScore(10);
         }
+    }
+
+    private void Hello() {
+        
     }
 }
