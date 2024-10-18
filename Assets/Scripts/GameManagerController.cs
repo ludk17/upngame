@@ -10,10 +10,8 @@ public class GameManagerController : MonoBehaviour
 
     private GameData gData;
     private GameDataRepository gDataRepository;
-
     // private int score = 0;
     // private int lives = 3;
-
     private TMP_Text scoreText;
     private TMP_Text livesText;
     private TMP_Text kunaisText;
@@ -25,8 +23,9 @@ public class GameManagerController : MonoBehaviour
 
         scoreText = GameObject.Find("PuntajeText").GetComponent<TextMeshProUGUI>();
         livesText = GameObject.Find("VidasText").GetComponent<TextMeshProUGUI>();
-        kunaisText = GameObject.Find("`").GetComponent<TextMeshProUGUI>();
+        kunaisText = GameObject.Find("KunaisText").GetComponent<TextMeshProUGUI>();
     }
+
 
     public void AddScore(int scoreToAdd) {
         gData.score += scoreToAdd;
