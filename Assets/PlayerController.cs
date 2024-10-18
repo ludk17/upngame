@@ -5,9 +5,13 @@ using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
+    public AudioClip jumpSound;
+
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer sr;
+    private AudioSource audioSource;
+
 
     private const int ANIMATION_IDLE = 0;
     private const int ANIMATION_RUN = 1;
@@ -26,6 +30,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         gameManager = GameObject.Find("GameManager");
         playerMessage = GameObject.Find("PlayerMessage");
+        audioSource = GetComponent<AudioSource>();
         
     }
 
@@ -41,6 +46,7 @@ public class PlayerController : MonoBehaviour
         } else {
             rb.velocity = new Vector2(0, 0);
         }
+
         
         animator.SetInteger("Estado", ANIMATION_IDLE);
 
@@ -71,7 +77,9 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Space))
         {
             rb.velocity = new Vector2(rb.velocity.x, 10);
+            Debug.Log("Salto");
             animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
+            audioSource.PlayOneShot(jumpSound);
         }
         
     }
