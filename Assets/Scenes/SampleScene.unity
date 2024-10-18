@@ -1365,7 +1365,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: b92a985479c9e464f8288869c857db2f, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.455
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -4834,6 +4834,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kunaiPrefab: {fileID: 8462893332930399463, guid: b7b17fe4bc43f457a8c4d47472edb32b, type: 3}
+  sound: {fileID: 8300000, guid: 4ee30118d6a31494089b3f2299d23178, type: 3}
 --- !u!82 &956741570
 AudioSource:
   m_ObjectHideFlags: 0
