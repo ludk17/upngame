@@ -1,18 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAttackController : MonoBehaviour
 {
+    public AudioClip atack;
+
     public GameObject kunaiPrefab;   
     private GameManagerController gameManagerController;
 
+    private AudioSource audioSource;
+   
     SpriteRenderer sr;
     // Start is called before the first frame update
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
         gameManagerController = GameObject.Find("GameManager").GetComponent<GameManagerController>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -23,11 +29,15 @@ public class PlayerAttackController : MonoBehaviour
         {
             GameObject kunai = Instantiate(kunaiPrefab, transform.position, Quaternion.identity);
             kunai.GetComponent<KunaiController>().SetDirection(sr.flipX ? "left" : "right");
-            gameManagerController.ReduceKunai();
-            
-        }
-        
-    }
+            audioSource.PlayOneShot(atack);
+            gameManagerController.ReduceKunai();//Reduce
+            //gameManagerController.AddKunai(5);//Aument
 
-    
+        }
+        if (Input.GetKeyUp(KeyCode.U))
+        {
+            Console.WriteLine("Add Kunai");
+            gameManagerController.AddKunai(5);
+        }        
+    }    
 }

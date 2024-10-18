@@ -5,9 +5,12 @@ using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
+    public AudioClip jumpsound;    
+
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer sr;
+    private AudioSource audioSource;
 
     private const int ANIMATION_IDLE = 0;
     private const int ANIMATION_RUN = 1;
@@ -26,6 +29,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         gameManager = GameObject.Find("GameManager");
         playerMessage = GameObject.Find("PlayerMessage");
+        audioSource = gameManager.AddComponent<AudioSource>();
         
     }
 
@@ -57,7 +61,7 @@ public class PlayerController : MonoBehaviour
         }
 
         if (Input.GetKey(KeyCode.UpArrow) && !gravedadEstaActivada) {
-                rb.velocity = new Vector2(rb.velocity.x, 10);
+                rb.velocity = new Vector2(rb.velocity.x, 10);            
         }
         
         if (Input.GetKey(KeyCode.DownArrow) && !gravedadEstaActivada) {
@@ -70,10 +74,10 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            rb.velocity = new Vector2(rb.velocity.x, 10);
-            animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
-        }
-        
+            audioSource.PlayOneShot(jumpsound);
+            rb.velocity = new Vector2(rb.velocity.x, 10);            
+            animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando            
+        }        
     }
 
     void OnCollisionEnter2D(Collision2D collision) {
