@@ -5,6 +5,8 @@ using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
+    public AudioClip jumpSound;
+    private AudioSource audioSource;
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer sr;
@@ -26,6 +28,8 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         gameManager = GameObject.Find("GameManager");
         playerMessage = GameObject.Find("PlayerMessage");
+
+        audioSource = GetComponent<AudioSource>();
         
     }
 
@@ -48,6 +52,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector2(10, rb.velocity.y);            
             sr.flipX = false;
+
         }
 
         if (Input.GetKey(KeyCode.LeftArrow))
@@ -72,6 +77,8 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, 10);
             animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
+            audioSource.PlayOneShot(jumpSound);
+
         }
         
     }
