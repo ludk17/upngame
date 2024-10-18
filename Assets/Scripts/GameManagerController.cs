@@ -25,7 +25,7 @@ public class GameManagerController : MonoBehaviour
 
         scoreText = GameObject.Find("PuntajeText").GetComponent<TextMeshProUGUI>();
         livesText = GameObject.Find("VidasText").GetComponent<TextMeshProUGUI>();
-        kunaisText = GameObject.Find("KunaisText").GetComponent<TextMeshProUGUI>();
+        kunaisText = GameObject.Find("`").GetComponent<TextMeshProUGUI>();
     }
 
     public void AddScore(int scoreToAdd) {
@@ -64,7 +64,11 @@ public class GameManagerController : MonoBehaviour
     void Update()
     {
         scoreText.text = "Puntaje: " + gData.score;
-        livesText.text = "Vidas: " + "".PadRight(gData.lives, '♥');
+        
+        if (gData.lives > 0) {
+            livesText.text = "Vidas: " + "".PadRight(gData.lives, '♥');
+        }
+        
         kunaisText.text = "Kunais: " + gData.kunais;
         if (gData.lives == 0) {
             Debug.Log("Game Over");
