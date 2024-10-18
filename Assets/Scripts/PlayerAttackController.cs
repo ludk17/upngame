@@ -6,6 +6,8 @@ public class PlayerAttackController : MonoBehaviour
 {
     public GameObject kunaiPrefab;   
     private GameManagerController gameManagerController;
+    private AudioSource audiosourse;
+    public AudioClip audiocampana;
 
     SpriteRenderer sr;
     // Start is called before the first frame update
@@ -13,6 +15,8 @@ public class PlayerAttackController : MonoBehaviour
     {
         sr = GetComponent<SpriteRenderer>();
         gameManagerController = GameObject.Find("GameManager").GetComponent<GameManagerController>();
+        audiosourse = GetComponent<AudioSource>();
+
     }
 
     // Update is called once per frame
@@ -24,6 +28,7 @@ public class PlayerAttackController : MonoBehaviour
             GameObject kunai = Instantiate(kunaiPrefab, transform.position, Quaternion.identity);
             kunai.GetComponent<KunaiController>().SetDirection(sr.flipX ? "left" : "right");
             gameManagerController.ReduceKunai();
+            audiosourse.PlayOneShot(audiocampana);
             
         }
         
