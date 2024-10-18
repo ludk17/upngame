@@ -5,9 +5,11 @@ using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
+    public AudioClip jumpSound;
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer sr;
+    private AudioSource audioSource;
 
     private const int ANIMATION_IDLE = 0;
     private const int ANIMATION_RUN = 1;
@@ -26,6 +28,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         gameManager = GameObject.Find("GameManager");
         playerMessage = GameObject.Find("PlayerMessage");
+        audioSource = GetComponent<AudioSource>();
         
     }
 
