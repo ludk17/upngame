@@ -5,9 +5,12 @@ using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
+    public AudioClip saltoSound;
+
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer sr;
+    private AudioSource audioSource;
 
     private const int ANIMATION_IDLE = 0;
     private const int ANIMATION_RUN = 1;
@@ -17,36 +20,50 @@ public class PlayerController : MonoBehaviour
 
     private GameObject gameManager;
     private GameObject playerMessage;
+
     // Start is called before the first frame update
     void Start()
     {
-        // acceder a rigidbody
+        // acceder a Rigidbody2D
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         gameManager = GameObject.Find("GameManager");
         playerMessage = GameObject.Find("PlayerMessage");
-        
+
+        // Verificar si el objeto tiene un AudioSource, si no, añadirlo
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+            Debug.Log("AudioSource añadido automáticamente.");
+        }
+
+        // Comprobar que saltoSound esté asignado
+        if (saltoSound == null)
+        {
+            Debug.LogError("El clip de sonido 'saltoSound' no está asignado en el inspector.");
+        }
     }
 
     // Update is called once per frame
-    void Update() {
-        // // modificar el rigidibody
-        
-        // GetKeyUp: se ejecuta cuando se suelta la tecla
-        // GetKeyDown: se ejecuta cuando se presiona la tecla
-        // GetKey: se ejecuta mientras se mantiene presionada la tecla
-        if (gravedadEstaActivada) {
+    void Update()
+    {
+        // Modificar el Rigidbody
+        if (gravedadEstaActivada)
+        {
             rb.velocity = new Vector2(0, rb.velocity.y);
-        } else {
+        }
+        else
+        {
             rb.velocity = new Vector2(0, 0);
         }
-        
+
         animator.SetInteger("Estado", ANIMATION_IDLE);
 
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            rb.velocity = new Vector2(10, rb.velocity.y);            
+            rb.velocity = new Vector2(10, rb.velocity.y);
             sr.flipX = false;
         }
 
@@ -56,28 +73,43 @@ public class PlayerController : MonoBehaviour
             sr.flipX = true;
         }
 
-        if (Input.GetKey(KeyCode.UpArrow) && !gravedadEstaActivada) {
-                rb.velocity = new Vector2(rb.velocity.x, 10);
+        if (Input.GetKey(KeyCode.UpArrow) && !gravedadEstaActivada)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, 10);
         }
-        
-        if (Input.GetKey(KeyCode.DownArrow) && !gravedadEstaActivada) {
+
+        if (Input.GetKey(KeyCode.DownArrow) && !gravedadEstaActivada)
+        {
             rb.velocity = new Vector2(rb.velocity.x, -10);
         }
 
-        if (rb.velocity.x != 0) {
+        if (rb.velocity.x != 0)
+        {
             animator.SetInteger("Estado", ANIMATION_RUN);
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
             rb.velocity = new Vector2(rb.velocity.x, 10);
-            animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
+
+            // Comprobar si el saltoSound está asignado antes de reproducirlo
+            if (saltoSound != null)
+            {
+                audioSource.PlayOneShot(saltoSound);
+            }
+            else
+            {
+                Debug.LogError("No hay sonido asignado para el salto.");
+            }
+
+            animator.SetInteger("Estado", ANIMATION_JUMP); // Animación de salto
         }
-        
     }
 
-    void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.gameObject.tag == "Enemy") {
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
             Debug.Log("Colision con Enemigo");
             gameManager.GetComponent<GameManagerController>().RemoveLife();
             playerMessage.GetComponent<TextMeshProUGUI>().text = "Ouch!";
@@ -85,40 +117,46 @@ public class PlayerController : MonoBehaviour
             Invoke("HideMessage", 1);
         }
 
-        if (collision.gameObject.name == "Coin") {
+        if (collision.gameObject.name == "Coin")
+        {
             // hacer 2
             Debug.Log("Colision con Coin");
         }
 
-        if (collision.gameObject.name == "Finish") {
+        if (collision.gameObject.name == "Finish")
+        {
             // hacer 3
             Debug.Log("Colision con Finish");
         }
 
-        if (collision.gameObject.tag == "Recollectable") {
+        if (collision.gameObject.tag == "Recollectable")
+        {
             var gameManagerC = gameManager.GetComponent<GameManagerController>();
             gameManagerC.AddKunai(3);
             Destroy(collision.gameObject);
         }
-        
     }
 
-    void OnTriggerStay2D(Collider2D collider) {
-        if (collider.gameObject.name == "Pared") {
+    void OnTriggerStay2D(Collider2D collider)
+    {
+        if (collider.gameObject.name == "Pared")
+        {
             rb.gravityScale = 0;
             gravedadEstaActivada = false;
         }
     }
 
-    void OnTriggerExit2D(Collider2D collider) {
-        if (collider.gameObject.name == "Pared") {
+    void OnTriggerExit2D(Collider2D collider)
+    {
+        if (collider.gameObject.name == "Pared")
+        {
             rb.gravityScale = 1;
             gravedadEstaActivada = true;
         }
     }
 
-    private void HideMessage() {
+    private void HideMessage()
+    {
         playerMessage.GetComponent<TextMeshProUGUI>().text = "";
     }
-
 }
