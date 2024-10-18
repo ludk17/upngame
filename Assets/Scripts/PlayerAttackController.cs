@@ -7,6 +7,8 @@ public class PlayerAttackController : MonoBehaviour
     public GameObject kunaiPrefab;   
     private GameManagerController gameManagerController;
 
+    private AudioSource kunaiSound;
+
     SpriteRenderer sr;
     // Start is called before the first frame update
     void Start()
