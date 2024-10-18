@@ -25,7 +25,7 @@ public class GameManagerController : MonoBehaviour
 
         scoreText = GameObject.Find("PuntajeText").GetComponent<TextMeshProUGUI>();
         livesText = GameObject.Find("VidasText").GetComponent<TextMeshProUGUI>();
-        kunaisText = GameObject.Find("`").GetComponent<TextMeshProUGUI>();
+        kunaisText = GameObject.Find("KunaisText").GetComponent<TextMeshProUGUI>();
     }
 
     public void AddScore(int scoreToAdd) {
