@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer sr;
+    private AudioSource audioSource;
+    public AudioClip audioClipSalto;
 
     private const int ANIMATION_IDLE = 0;
     private const int ANIMATION_RUN = 1;
@@ -24,6 +26,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         gameManager = GameObject.Find("GameManager");
         playerMessage = GameObject.Find("PlayerMessage");
         
@@ -69,8 +72,9 @@ public class PlayerController : MonoBehaviour
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
-        {
+        {       
             rb.velocity = new Vector2(rb.velocity.x, 10);
+            audioSource.PlayOneShot(audioClipSalto);
             animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
         }
         
