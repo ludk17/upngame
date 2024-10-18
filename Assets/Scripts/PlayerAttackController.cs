@@ -6,6 +6,8 @@ public class PlayerAttackController : MonoBehaviour
 {
     public GameObject kunaiPrefab;   
     private GameManagerController gameManagerController;
+    public AudioClip jumpSound;
+    private AudioSource audioSource;
 
     SpriteRenderer sr;
     // Start is called before the first frame update
@@ -24,7 +26,8 @@ public class PlayerAttackController : MonoBehaviour
             GameObject kunai = Instantiate(kunaiPrefab, transform.position, Quaternion.identity);
             kunai.GetComponent<KunaiController>().SetDirection(sr.flipX ? "left" : "right");
             gameManagerController.ReduceKunai();
-            
+            audioSource.PlayOneShot(jumpSound);
+
         }
         
     }
