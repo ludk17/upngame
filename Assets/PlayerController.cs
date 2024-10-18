@@ -8,7 +8,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer sr;
-
+    public AudioClip JumpSound;
+    private AudioSource audioSource;
     private const int ANIMATION_IDLE = 0;
     private const int ANIMATION_RUN = 1;
     private const int ANIMATION_JUMP = 2;
@@ -24,6 +25,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        audioSource= GetComponent<AudioSource>();
         gameManager = GameObject.Find("GameManager");
         playerMessage = GameObject.Find("PlayerMessage");
         
@@ -72,6 +74,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, 10);
             animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
+            audioSource.PlayOneShot(JumpSound);
         }
         
     }
