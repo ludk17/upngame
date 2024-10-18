@@ -6,9 +6,10 @@ using TMPro;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
+    public AudioClip jump;
+    private AudioSource audiosource;
     private Animator animator;
     private SpriteRenderer sr;
-
     private const int ANIMATION_IDLE = 0;
     private const int ANIMATION_RUN = 1;
     private const int ANIMATION_JUMP = 2;
@@ -20,6 +21,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        audiosource=GetComponent<AudioSource>();
         // acceder a rigidbody
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
@@ -72,6 +74,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, 10);
             animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
+            audiosource.PlayOneShot(jump);
         }
         
     }
