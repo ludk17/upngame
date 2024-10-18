@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class PlayerAttackController : MonoBehaviour
 {
+    public AudioClip KunaiSound;
     public GameObject kunaiPrefab;   
     private GameManagerController gameManagerController;
+    private AudioSource audioSource;
 
     SpriteRenderer sr;
     // Start is called before the first frame update
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
         gameManagerController = GameObject.Find("GameManager").GetComponent<GameManagerController>();
     }
 
@@ -24,7 +27,7 @@ public class PlayerAttackController : MonoBehaviour
             GameObject kunai = Instantiate(kunaiPrefab, transform.position, Quaternion.identity);
             kunai.GetComponent<KunaiController>().SetDirection(sr.flipX ? "left" : "right");
             gameManagerController.ReduceKunai();
-            
+            audioSource.PlayOneShot(KunaiSound);
         }
         
     }
