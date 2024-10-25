@@ -5,9 +5,15 @@ using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
+
+    public AudioClip jumpSound;
+
+
+
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer sr;
+    private AudioSource audioSource;
 
     private const int ANIMATION_IDLE = 0;
     private const int ANIMATION_RUN = 1;
@@ -24,29 +30,34 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         gameManager = GameObject.Find("GameManager");
         playerMessage = GameObject.Find("PlayerMessage");
-        
+
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update()
+    {
         // // modificar el rigidibody
-        
+
         // GetKeyUp: se ejecuta cuando se suelta la tecla
         // GetKeyDown: se ejecuta cuando se presiona la tecla
         // GetKey: se ejecuta mientras se mantiene presionada la tecla
-        if (gravedadEstaActivada) {
+        if (gravedadEstaActivada)
+        {
             rb.velocity = new Vector2(0, rb.velocity.y);
-        } else {
+        }
+        else
+        {
             rb.velocity = new Vector2(0, 0);
         }
-        
+
         animator.SetInteger("Estado", ANIMATION_IDLE);
 
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            rb.velocity = new Vector2(10, rb.velocity.y);            
+            rb.velocity = new Vector2(10, rb.velocity.y);
             sr.flipX = false;
         }
 
@@ -56,28 +67,35 @@ public class PlayerController : MonoBehaviour
             sr.flipX = true;
         }
 
-        if (Input.GetKey(KeyCode.UpArrow) && !gravedadEstaActivada) {
-                rb.velocity = new Vector2(rb.velocity.x, 10);
+        if (Input.GetKey(KeyCode.UpArrow) && !gravedadEstaActivada)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, 10);
         }
-        
-        if (Input.GetKey(KeyCode.DownArrow) && !gravedadEstaActivada) {
+
+        if (Input.GetKey(KeyCode.DownArrow) && !gravedadEstaActivada)
+        {
             rb.velocity = new Vector2(rb.velocity.x, -10);
         }
 
-        if (rb.velocity.x != 0) {
+        if (rb.velocity.x != 0)
+        {
             animator.SetInteger("Estado", ANIMATION_RUN);
         }
 
+        //Saltar
         if (Input.GetKeyUp(KeyCode.Space))
         {
             rb.velocity = new Vector2(rb.velocity.x, 10);
             animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
+            audioSource.PlayOneShot(jumpSound);
         }
-        
+
     }
 
-    void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.gameObject.tag == "Enemy") {
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
             Debug.Log("Colision con Enemigo");
             gameManager.GetComponent<GameManagerController>().RemoveLife();
             playerMessage.GetComponent<TextMeshProUGUI>().text = "Ouch!";
@@ -85,39 +103,47 @@ public class PlayerController : MonoBehaviour
             Invoke("HideMessage", 1);
         }
 
-        if (collision.gameObject.name == "Coin") {
+        if (collision.gameObject.name == "Coin")
+        {
             // hacer 2
             Debug.Log("Colision con Coin");
         }
 
-        if (collision.gameObject.name == "Finish") {
+        if (collision.gameObject.name == "Finish")
+        {
             // hacer 3
             Debug.Log("Colision con Finish");
         }
 
-        if (collision.gameObject.tag == "Recollectable") {
+        if (collision.gameObject.tag == "Recollectable")
+        {
             var gameManagerC = gameManager.GetComponent<GameManagerController>();
             gameManagerC.AddKunai(3);
             Destroy(collision.gameObject);
         }
-        
+
     }
 
-    void OnTriggerStay2D(Collider2D collider) {
-        if (collider.gameObject.name == "Pared") {
+    void OnTriggerStay2D(Collider2D collider)
+    {
+        if (collider.gameObject.name == "Pared")
+        {
             rb.gravityScale = 0;
             gravedadEstaActivada = false;
         }
     }
 
-    void OnTriggerExit2D(Collider2D collider) {
-        if (collider.gameObject.name == "Pared") {
+    void OnTriggerExit2D(Collider2D collider)
+    {
+        if (collider.gameObject.name == "Pared")
+        {
             rb.gravityScale = 1;
             gravedadEstaActivada = true;
         }
     }
 
-    private void HideMessage() {
+    private void HideMessage()
+    {
         playerMessage.GetComponent<TextMeshProUGUI>().text = "";
     }
 

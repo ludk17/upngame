@@ -18,7 +18,8 @@ public class GameManagerController : MonoBehaviour
     private TMP_Text kunaisText;
 
     // Start is called before the first frame update
-    void Start() {
+    void Start()
+    {
         gDataRepository = new GameDataRepository();
         gData = gDataRepository.LoadGame();
 
@@ -27,7 +28,8 @@ public class GameManagerController : MonoBehaviour
         kunaisText = GameObject.Find("KunaisText").GetComponent<TextMeshProUGUI>();
     }
 
-    public void AddScore(int scoreToAdd) {
+    public void AddScore(int scoreToAdd)
+    {
         gData.score += scoreToAdd;
         gDataRepository.SaveGame(gData);
     }
@@ -59,17 +61,19 @@ public class GameManagerController : MonoBehaviour
     {
         return gData;
     }
-    
+
     void Update()
     {
         scoreText.text = "Puntaje: " + gData.score;
-        
-        if (gData.lives > 0) {
+
+        if (gData.lives > 0)
+        {
             livesText.text = "Vidas: " + "".PadRight(gData.lives, '♥');
         }
-        
+
         kunaisText.text = "Kunais: " + gData.kunais;
-        if (gData.lives == 0) {
+        if (gData.lives == 0)
+        {
             Debug.Log("Game Over");
         }
     }
