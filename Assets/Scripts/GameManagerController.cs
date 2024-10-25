@@ -6,8 +6,7 @@ using TMPro;
 
 
 public class GameManagerController : MonoBehaviour
-{   
-
+{
     private GameData gData;
     private GameDataRepository gDataRepository;
    
