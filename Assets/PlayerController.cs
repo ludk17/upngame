@@ -5,6 +5,8 @@ using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
+    private AudioSource audioSource;
+    public AudioClip jumpSound;
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer sr;
@@ -26,7 +28,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         gameManager = GameObject.Find("GameManager");
         playerMessage = GameObject.Find("PlayerMessage");
-        
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -71,6 +73,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Space))
         {
             rb.velocity = new Vector2(rb.velocity.x, 10);
+            audioSource.PlayOneShot(jumpSound);
             animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
         }
         
