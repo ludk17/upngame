@@ -1,19 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ZombieController : MonoBehaviour
 {
     Rigidbody2D rb;
-    // Start is called before the first frame update
+    private float moveDuration = 8f; 
+    private float moveSpeed = 4f;
+    private float timer = 0f; 
+    private bool movingRight; 
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        movingRight = Random.value > 0.5f; 
+       
+        transform.localScale = new Vector3(movingRight ? 1 : -1, 1, 1);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        rb.velocity = new Vector2(-2, rb.velocity.y);
+        
+        timer += Time.deltaTime;
+
+        if (timer >= moveDuration)
+        {
+            movingRight = !movingRight; 
+            timer = 0f;
+            transform.localScale = new Vector3(movingRight ? 1 : -1, 1, 1);
+        }
+
+        float direction = movingRight ? 1 : -1;
+        rb.velocity = new Vector2(direction * moveSpeed, rb.velocity.y);
     }
 }
