@@ -6,10 +6,10 @@ using UnityEngine;
 public class GameData
 {
     public int score = 0;
-    public int lives = 3;
-    public int kunais = 0;
+    public int lives = 5;
+    public int kunais = 40;
 
-    public int posiones = 0;
+    public int posiones = 0; 
     public int llaves = 0;
 
     public bool comioHongo = true;

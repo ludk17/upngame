@@ -6,11 +6,12 @@ TagManager:
   tags:
   - Enemy
   - Recollectable
+  - Pared
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Pared
   - Water
   - UI
   - 
