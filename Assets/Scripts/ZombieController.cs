@@ -4,16 +4,27 @@ using UnityEngine;
 
 public class ZombieController : MonoBehaviour
 {
-    Rigidbody2D rb;
-    // Start is called before the first frame update
+    private Rigidbody2D rb;
+    private SpriteRenderer sr;
+    float direccionx=-1;
+
     void Start()
     {
+        sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void Update() 
     {
-        rb.velocity = new Vector2(-2, rb.velocity.y);
+        rb.velocity = new Vector2(direccionx*3, rb.velocity.y);
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Wall"))
+        {
+            direccionx*=-1;
+            sr.flipX = !sr.flipX;
+        }
     }
 }
