@@ -30,14 +30,17 @@ public class PlayerAttackController : MonoBehaviour
             GameObject kunai = Instantiate(kunaiPrefab, transform.position, Quaternion.identity);
             kunai.GetComponent<KunaiController>().SetDirection(sr.flipX ? "left" : "right");
             audioSource.PlayOneShot(atack);
-            gameManagerController.ReduceKunai();//Reduce
-            //gameManagerController.AddKunai(5);//Aument
-
+            gameManagerController.ReduceKunai();
         }
         if (Input.GetKeyUp(KeyCode.U))
         {
             Console.WriteLine("Add Kunai");
             gameManagerController.AddKunai(5);
-        }        
+        }
+        if (Input.GetKeyUp(KeyCode.L))
+        {
+            Console.WriteLine("Add Life");
+            gameManagerController.AddLife();
+        }
     }    
 }

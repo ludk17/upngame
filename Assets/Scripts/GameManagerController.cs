@@ -38,6 +38,12 @@ public class GameManagerController : MonoBehaviour
         gDataRepository.SaveGame(gData);
     }
 
+    public void AddLife()
+    {
+        gData.lives++;
+        gDataRepository.SaveGame(gData);
+    }
+
     public void ReduceKunai()
     {
         gData.kunais--;
