@@ -18,6 +18,11 @@ public class PlayerController : MonoBehaviour
     private GameObject gameManager;
     private GameObject playerMessage;
     // Start is called before the first frame update
+
+    // variables para interactura
+    private float velocityX = 0f;
+    private bool saltar = false;
+
     void Start()
     {
         // acceder a rigidbody
@@ -26,54 +31,74 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         gameManager = GameObject.Find("GameManager");
         playerMessage = GameObject.Find("PlayerMessage");
-        
+
     }
 
     // Update is called once per frame
     void Update() {
         // // modificar el rigidibody
-        
-        // GetKeyUp: se ejecuta cuando se suelta la tecla
-        // GetKeyDown: se ejecuta cuando se presiona la tecla
-        // GetKey: se ejecuta mientras se mantiene presionada la tecla
-        if (gravedadEstaActivada) {
-            rb.velocity = new Vector2(0, rb.velocity.y);
-        } else {
-            rb.velocity = new Vector2(0, 0);
-        }
-        
-        animator.SetInteger("Estado", ANIMATION_IDLE);
 
-        if (Input.GetKey(KeyCode.RightArrow))
+        rb.velocity = new Vector2(velocityX, rb.velocity.y);
+        if (velocityX != 0f) {
+            animator.SetInteger("Estado", ANIMATION_RUN);
+        } else
         {
-            rb.velocity = new Vector2(10, rb.velocity.y);            
+            animator.SetInteger("Estado", ANIMATION_IDLE);
+        }
+
+        if (velocityX > 0) {
             sr.flipX = false;
-        }
-
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            rb.velocity = new Vector2(-10, rb.velocity.y);
+        } else if (velocityX < 0) {
             sr.flipX = true;
         }
 
-        if (Input.GetKey(KeyCode.UpArrow) && !gravedadEstaActivada) {
-                rb.velocity = new Vector2(rb.velocity.x, 10);
-        }
-        
-        if (Input.GetKey(KeyCode.DownArrow) && !gravedadEstaActivada) {
-            rb.velocity = new Vector2(rb.velocity.x, -10);
-        }
-
-        if (rb.velocity.x != 0) {
-            animator.SetInteger("Estado", ANIMATION_RUN);
-        }
-
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (saltar)
         {
             rb.velocity = new Vector2(rb.velocity.x, 10);
-            animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
+            animator.SetInteger("Estado", ANIMATION_JUMP);
+            saltar = false;
         }
-        
+        // GetKeyUp: se ejecuta cuando se suelta la tecla
+        // GetKeyDown: se ejecuta cuando se presiona la tecla
+        // GetKey: se ejecuta mientras se mantiene presionada la tecla
+        //if (gravedadEstaActivada) {
+        //    rb.velocity = new Vector2(0, rb.velocity.y);
+        //} else {
+        //    rb.velocity = new Vector2(0, 0);
+        //}
+
+        //animator.SetInteger("Estado", ANIMATION_IDLE);
+
+        //if (Input.GetKey(KeyCode.RightArrow))
+        //{
+        //    rb.velocity = new Vector2(10, rb.velocity.y);            
+        //    sr.flipX = false;
+        //}
+
+        //if (Input.GetKey(KeyCode.LeftArrow))
+        //{
+        //    rb.velocity = new Vector2(-10, rb.velocity.y);
+        //    sr.flipX = true;
+        //}
+
+        //if (Input.GetKey(KeyCode.UpArrow) && !gravedadEstaActivada) {
+        //        rb.velocity = new Vector2(rb.velocity.x, 10);
+        //}
+
+        //if (Input.GetKey(KeyCode.DownArrow) && !gravedadEstaActivada) {
+        //    rb.velocity = new Vector2(rb.velocity.x, -10);
+        //}
+
+        //if (rb.velocity.x != 0) {
+        //    animator.SetInteger("Estado", ANIMATION_RUN);
+        //}
+
+        //if (Input.GetKeyUp(KeyCode.Space))
+        //{
+        //    rb.velocity = new Vector2(rb.velocity.x, 10);
+        //    animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
+        //}
+
     }
 
     void OnCollisionEnter2D(Collision2D collision) {
@@ -100,7 +125,7 @@ public class PlayerController : MonoBehaviour
             gameManagerC.AddKunai(3);
             Destroy(collision.gameObject);
         }
-        
+
     }
 
     void OnTriggerStay2D(Collider2D collider) {
@@ -121,4 +146,21 @@ public class PlayerController : MonoBehaviour
         playerMessage.GetComponent<TextMeshProUGUI>().text = "";
     }
 
+    public void WalkRight()
+    {
+        velocityX = 10;
+    }
+    public void WalStop()
+    {
+        velocityX = 0;
+    }
+
+    public void WalkLeft()
+    {
+        velocityX = -10;
+    }
+    public void Jump()
+    {
+        saltar = true; 
+    }
 }
