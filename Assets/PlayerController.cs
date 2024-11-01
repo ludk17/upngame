@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
+<<<<<<< Semana_12
         // // modificar el rigidibody
         rb.velocity = new Vector2(velocityX, rb.velocity.y);
         if (velocityX != 0)
@@ -60,6 +61,9 @@ public class PlayerController : MonoBehaviour
         {
             sr.flipX = true; 
         }
+=======
+        
+>>>>>>> local
         // GetKeyUp: se ejecuta cuando se suelta la tecla
         // GetKeyDown: se ejecuta cuando se presiona la tecla
         // GetKey: se ejecuta mientras se mantiene presionada la tecla
