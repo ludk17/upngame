@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - Recollectable
+  - pared
   layers:
   - Default
   - TransparentFX
