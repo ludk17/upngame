@@ -6,6 +6,14 @@ TagManager:
   tags:
   - Enemy
   - Recollectable
+  - Wall
+  - "public GameObject enemyPrefab; // Prefab del enemigo que se va a instanciar\n   
+    public float spawnInterval = 2f; // Intervalo de tiempo entre cada aparici\xF3n\n\n   
+    private float timer;\n\n    private void Update()\n    {\n        timer += Time.deltaTime;\n       
+    if (timer >= spawnInterval)\n        {\n            SpawnEnemy();\n           
+    timer = 0f;\n        }\n    }\n\n    void SpawnEnemy()\n    {\n        // Instancia
+    un nuevo enemigo en la posici\xF3n del generador\n        Instantiate(enemyPrefab,
+    transform.position, Quaternion.identity);\n    }\n"
   layers:
   - Default
   - TransparentFX
