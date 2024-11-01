@@ -5,6 +5,8 @@ using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
+    public float velocityX =10;
+    public float velocityY=10;
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer sr;
@@ -46,12 +48,14 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            rb.velocity = new Vector2(10, rb.velocity.y);            
+            rb.velocity = new Vector2(10, rb.velocity.y); 
+            WalkRight();           
             sr.flipX = false;
         }
 
         if (Input.GetKey(KeyCode.LeftArrow))
         {
+            WalkLeft();
             rb.velocity = new Vector2(-10, rb.velocity.y);
             sr.flipX = true;
         }
@@ -119,6 +123,17 @@ public class PlayerController : MonoBehaviour
 
     private void HideMessage() {
         playerMessage.GetComponent<TextMeshProUGUI>().text = "";
+    }
+
+    public void WalkRight() {
+        velocityX = 10;
+    
+    }
+    public void WalkLeft() {
+        velocityX = -10;
+    }
+    public void WalkStop() {
+        velocityX = 0;
     }
 
 }
