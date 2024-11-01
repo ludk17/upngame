@@ -6,9 +6,10 @@ using TMPro;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
+    public AudioClip jump;
+    private AudioSource audiosource;
     private Animator animator;
     private SpriteRenderer sr;
-
     private const int ANIMATION_IDLE = 0;
     private const int ANIMATION_RUN = 1;
     private const int ANIMATION_JUMP = 2;
@@ -18,8 +19,13 @@ public class PlayerController : MonoBehaviour
     private GameObject gameManager;
     private GameObject playerMessage;
     // Start is called before the first frame update
+
+
+    private float velocityX = 0f;
+    private bool saltar = false;
     void Start()
     {
+        audiosource=GetComponent<AudioSource>();
         // acceder a rigidbody
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
@@ -32,10 +38,32 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update() {
         // // modificar el rigidibody
-        
+        rb.velocity = new Vector2(velocityX, rb.velocity.y);
+        if (velocityX != 0)
+        {
+            animator.SetInteger("Estado", ANIMATION_RUN);
+        }
+        else
+        {
+            animator.SetInteger("Estado", ANIMATION_IDLE);
+        }
+        if (saltar)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, 10);
+            animator.SetInteger("Estado", ANIMATION_JUMP);
+            saltar=false;
+        }
+        if (velocityX > 0) {
+            sr.flipX = false;
+        }
+        else
+        {
+            sr.flipX = true; 
+        }
         // GetKeyUp: se ejecuta cuando se suelta la tecla
         // GetKeyDown: se ejecuta cuando se presiona la tecla
         // GetKey: se ejecuta mientras se mantiene presionada la tecla
+        /*
         if (gravedadEstaActivada) {
             rb.velocity = new Vector2(0, rb.velocity.y);
         } else {
@@ -72,8 +100,9 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, 10);
             animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
+            audiosource.PlayOneShot(jump);
         }
-        
+        */
     }
 
     void OnCollisionEnter2D(Collision2D collision) {
@@ -119,6 +148,22 @@ public class PlayerController : MonoBehaviour
 
     private void HideMessage() {
         playerMessage.GetComponent<TextMeshProUGUI>().text = "";
+    }
+    public void Jump()
+    {
+        saltar = true;
+    }
+    public void walkRight()
+    {
+        velocityX = 10;
+    }
+    public void walkLeft()
+    {
+        velocityX = -10;
+    }
+    public void walkStop()
+    {
+        velocityX = 0;
     }
 
 }
