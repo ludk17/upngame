@@ -19,6 +19,13 @@ public class PlayerController : MonoBehaviour
 
     private GameObject gameManager;
     private GameObject playerMessage;
+
+    // Crear variables para los botones
+    private float velocityX = 0f;
+    private bool saltar = false;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,47 +47,65 @@ public class PlayerController : MonoBehaviour
         // GetKeyUp: se ejecuta cuando se suelta la tecla
         // GetKeyDown: se ejecuta cuando se presiona la tecla
         // GetKey: se ejecuta mientras se mantiene presionada la tecla
-        if (gravedadEstaActivada) {
-            rb.velocity = new Vector2(0, rb.velocity.y);
-        } else {
-            rb.velocity = new Vector2(0, 0);
-        }
-        
-        animator.SetInteger("Estado", ANIMATION_IDLE);
 
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            rb.velocity = new Vector2(10, rb.velocity.y);            
+        rb.velocity = new Vector2(velocityX, rb.velocity.y);
+        if(velocityX > 0){
             sr.flipX = false;
-
-        }
-
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            rb.velocity = new Vector2(-10, rb.velocity.y);
+        }else if(velocityX < 0){
             sr.flipX = true;
         }
 
-        if (Input.GetKey(KeyCode.UpArrow) && !gravedadEstaActivada) {
-                rb.velocity = new Vector2(rb.velocity.x, 10);
-        }
-        
-        if (Input.GetKey(KeyCode.DownArrow) && !gravedadEstaActivada) {
-            rb.velocity = new Vector2(rb.velocity.x, -10);
-        }
-
-        if (rb.velocity.x != 0) {
+        if(velocityX != 0 ){
             animator.SetInteger("Estado", ANIMATION_RUN);
+        }else{
+            animator.SetInteger("Estado", ANIMATION_IDLE);
         }
 
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            rb.velocity = new Vector2(rb.velocity.x, 10);
-            animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
-            audioSource.PlayOneShot(jumpSound);
-
-        }
+        // if (gravedadEstaActivada) {
+        //     rb.velocity = new Vector2(0, rb.velocity.y);
+        // } else {
+        //     rb.velocity = new Vector2(0, 0);
+        // }
         
+        // animator.SetInteger("Estado", ANIMATION_IDLE);
+
+        // if (Input.GetKey(KeyCode.RightArrow))
+        // {
+        //     rb.velocity = new Vector2(10, rb.velocity.y);            
+        //     sr.flipX = false;
+
+        // }
+
+        // if (Input.GetKey(KeyCode.LeftArrow))
+        // {
+        //     rb.velocity = new Vector2(-10, rb.velocity.y);
+        //     sr.flipX = true;
+        // }
+
+        // if (Input.GetKey(KeyCode.UpArrow) && !gravedadEstaActivada) {
+        //         rb.velocity = new Vector2(rb.velocity.x, 10);
+        // }
+        
+        // if (Input.GetKey(KeyCode.DownArrow) && !gravedadEstaActivada) {
+        //     rb.velocity = new Vector2(rb.velocity.x, -10);
+        // }
+
+        // if (rb.velocity.x != 0) {
+        //     animator.SetInteger("Estado", ANIMATION_RUN);
+        // }
+
+        // if (Input.GetKeyUp(KeyCode.Space))
+        // {
+        //     rb.velocity = new Vector2(rb.velocity.x, 10);
+        //     animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
+        //     audioSource.PlayOneShot(jumpSound);
+
+        // }
+        if(saltar){
+            rb.velocity = new Vector2(rb.velocity.x, 10);
+            animator.SetInteger("Estado", ANIMATION_JUMP);
+            saltar = false;
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision) {
@@ -127,5 +152,16 @@ public class PlayerController : MonoBehaviour
     private void HideMessage() {
         playerMessage.GetComponent<TextMeshProUGUI>().text = "";
     }
-
+    public void WalkRight(){
+        velocityX = 10;
+    }
+    public void WalkLeft(){
+        velocityX = -10;
+    }
+    public void WalkStop(){
+        velocityX = 0;
+    }
+    public void WalkJump(){
+        saltar = true; 
+    }
 }
