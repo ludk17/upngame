@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
 
     private GameObject gameManager;
     private GameObject playerMessage;
+
+    private float velocityX = 0;
+    private bool jump=false;    
     // Start is called before the first frame update
     void Start()
     {
@@ -32,48 +35,73 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update() {
         // // modificar el rigidibody
-        
+
         // GetKeyUp: se ejecuta cuando se suelta la tecla
         // GetKeyDown: se ejecuta cuando se presiona la tecla
         // GetKey: se ejecuta mientras se mantiene presionada la tecla
-        if (gravedadEstaActivada) {
-            rb.velocity = new Vector2(0, rb.velocity.y);
-        } else {
-            rb.velocity = new Vector2(0, 0);
-        }
-        
-        animator.SetInteger("Estado", ANIMATION_IDLE);
-
-        if (Input.GetKey(KeyCode.RightArrow))
+        rb.velocity = new Vector2(velocityX, rb.velocity.y);
+        if (velocityX == 0)
         {
-            rb.velocity = new Vector2(10, rb.velocity.y);            
+            animator.SetInteger("Estado", ANIMATION_IDLE);
+        }
+
+        if (velocityX > 0)
+        {
+            animator.SetInteger("Estado", ANIMATION_RUN);
             sr.flipX = false;
         }
 
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (velocityX < 0)
         {
-            rb.velocity = new Vector2(-10, rb.velocity.y);
+            animator.SetInteger("Estado", ANIMATION_RUN);
             sr.flipX = true;
         }
 
-        if (Input.GetKey(KeyCode.UpArrow) && !gravedadEstaActivada) {
-                rb.velocity = new Vector2(rb.velocity.x, 10);
-        }
-        
-        if (Input.GetKey(KeyCode.DownArrow) && !gravedadEstaActivada) {
-            rb.velocity = new Vector2(rb.velocity.x, -10);
-        }
-
-        if (rb.velocity.x != 0) {
-            animator.SetInteger("Estado", ANIMATION_RUN);
-        }
-
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (jump)
         {
             rb.velocity = new Vector2(rb.velocity.x, 10);
             animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
+            jump = false;
         }
-        
+
+        //if (gravedadEstaActivada) {
+        //    rb.velocity = new Vector2(0, rb.velocity.y);
+        //} else {
+        //    rb.velocity = new Vector2(0, 0);
+        //}
+
+        //animator.SetInteger("Estado", ANIMATION_IDLE);
+
+        //if (Input.GetKey(KeyCode.RightArrow))
+        //{
+        //    rb.velocity = new Vector2(10, rb.velocity.y);            
+        //    sr.flipX = false;
+        //}
+
+        //if (Input.GetKey(KeyCode.LeftArrow))
+        //{
+        //    rb.velocity = new Vector2(-10, rb.velocity.y);
+        //    sr.flipX = true;
+        //}
+
+        //if (Input.GetKey(KeyCode.UpArrow) && !gravedadEstaActivada) {
+        //        rb.velocity = new Vector2(rb.velocity.x, 10);
+        //}
+
+        //if (Input.GetKey(KeyCode.DownArrow) && !gravedadEstaActivada) {
+        //    rb.velocity = new Vector2(rb.velocity.x, -10);
+        //}
+
+        //if (rb.velocity.x != 0) {
+        //    animator.SetInteger("Estado", ANIMATION_RUN);
+        //}
+
+        //if (Input.GetKeyUp(KeyCode.Space))
+        //{
+        //    rb.velocity = new Vector2(rb.velocity.x, 10);
+        //    animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
+        //}
+
     }
 
     void OnCollisionEnter2D(Collision2D collision) {
@@ -119,6 +147,26 @@ public class PlayerController : MonoBehaviour
 
     private void HideMessage() {
         playerMessage.GetComponent<TextMeshProUGUI>().text = "";
+    }
+
+    public void MoverHaciaDerecha()
+    {
+        velocityX = 10;
+    }
+
+    public void MoverHaciaIzquierda()
+    {
+        velocityX = -10;
+    }
+
+    public void Dtenerse()
+    {
+        velocityX = 0;
+    }
+
+    public void Saltar()
+    {
+        jump = true;
     }
 
 }
