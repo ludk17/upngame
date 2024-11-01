@@ -72,5 +72,6 @@ public class GameManagerController : MonoBehaviour
         if (gData.lives == 0) {
             Debug.Log("Game Over");
         }
+        
     }
 }
