@@ -12,6 +12,10 @@ public class PlayerController : MonoBehaviour
     private const int ANIMATION_IDLE = 0;
     private const int ANIMATION_RUN = 1;
     private const int ANIMATION_JUMP = 2;
+    private const int ANIMATION_ESPADAZO = 3;
+
+    //VARIABLE PARA LA ANIMACION DEL ESPADAZO
+    private bool EJECUTANDO_ESPADAZO=false;
 
     private bool gravedadEstaActivada = true;
 
@@ -39,68 +43,77 @@ public class PlayerController : MonoBehaviour
         // GetKeyUp: se ejecuta cuando se suelta la tecla
         // GetKeyDown: se ejecuta cuando se presiona la tecla
         // GetKey: se ejecuta mientras se mantiene presionada la tecla
-        rb.velocity = new Vector2(velocityX, rb.velocity.y);
-        if (velocityX == 0)
+        if (!EJECUTANDO_ESPADAZO)
         {
-            animator.SetInteger("Estado", ANIMATION_IDLE);
+            rb.velocity = new Vector2(velocityX, rb.velocity.y);
+            if (velocityX == 0)
+            {
+                animator.SetInteger("Estado", ANIMATION_IDLE);
+            }
+
+            if (velocityX > 0)
+            {
+                animator.SetInteger("Estado", ANIMATION_RUN);
+                sr.flipX = false;
+            }
+
+            if (velocityX < 0)
+            {
+                animator.SetInteger("Estado", ANIMATION_RUN);
+                sr.flipX = true;
+            }
+
+            if (jump)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, 10);
+                animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
+                jump = false;
+            }
+
+            //if (gravedadEstaActivada) {
+            //    rb.velocity = new Vector2(0, rb.velocity.y);
+            //} else {
+            //    rb.velocity = new Vector2(0, 0);
+            //}
+
+            //animator.SetInteger("Estado", ANIMATION_IDLE);
+
+            //if (Input.GetKey(KeyCode.RightArrow))
+            //{
+            //    rb.velocity = new Vector2(10, rb.velocity.y);            
+            //    sr.flipX = false;
+            //}
+
+            //if (Input.GetKey(KeyCode.LeftArrow))
+            //{
+            //    rb.velocity = new Vector2(-10, rb.velocity.y);
+            //    sr.flipX = true;
+            //}
+
+            //if (Input.GetKey(KeyCode.UpArrow) && !gravedadEstaActivada) {
+            //        rb.velocity = new Vector2(rb.velocity.x, 10);
+            //}
+
+            //if (Input.GetKey(KeyCode.DownArrow) && !gravedadEstaActivada) {
+            //    rb.velocity = new Vector2(rb.velocity.x, -10);
+            //}
+
+            //if (rb.velocity.x != 0) {
+            //    animator.SetInteger("Estado", ANIMATION_RUN);
+            //}
+
+            //if (Input.GetKeyUp(KeyCode.Space))
+            //{
+            //    rb.velocity = new Vector2(rb.velocity.x, 10);
+            //    animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
+            //}
         }
 
-        if (velocityX > 0)
+        else
         {
-            animator.SetInteger("Estado", ANIMATION_RUN);
-            sr.flipX = false;
+            animator.SetInteger("Estado", ANIMATION_ESPADAZO);
         }
 
-        if (velocityX < 0)
-        {
-            animator.SetInteger("Estado", ANIMATION_RUN);
-            sr.flipX = true;
-        }
-
-        if (jump)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, 10);
-            animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
-            jump = false;
-        }
-
-        //if (gravedadEstaActivada) {
-        //    rb.velocity = new Vector2(0, rb.velocity.y);
-        //} else {
-        //    rb.velocity = new Vector2(0, 0);
-        //}
-
-        //animator.SetInteger("Estado", ANIMATION_IDLE);
-
-        //if (Input.GetKey(KeyCode.RightArrow))
-        //{
-        //    rb.velocity = new Vector2(10, rb.velocity.y);            
-        //    sr.flipX = false;
-        //}
-
-        //if (Input.GetKey(KeyCode.LeftArrow))
-        //{
-        //    rb.velocity = new Vector2(-10, rb.velocity.y);
-        //    sr.flipX = true;
-        //}
-
-        //if (Input.GetKey(KeyCode.UpArrow) && !gravedadEstaActivada) {
-        //        rb.velocity = new Vector2(rb.velocity.x, 10);
-        //}
-
-        //if (Input.GetKey(KeyCode.DownArrow) && !gravedadEstaActivada) {
-        //    rb.velocity = new Vector2(rb.velocity.x, -10);
-        //}
-
-        //if (rb.velocity.x != 0) {
-        //    animator.SetInteger("Estado", ANIMATION_RUN);
-        //}
-
-        //if (Input.GetKeyUp(KeyCode.Space))
-        //{
-        //    rb.velocity = new Vector2(rb.velocity.x, 10);
-        //    animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
-        //}
 
     }
 
@@ -167,6 +180,16 @@ public class PlayerController : MonoBehaviour
     public void Saltar()
     {
         jump = true;
+    }
+
+    public void Espadazo()
+    {
+        EJECUTANDO_ESPADAZO = true;
+    }
+
+    public void DetenerEspadazo()
+    {
+        EJECUTANDO_ESPADAZO = false;
     }
 
 }
