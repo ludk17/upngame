@@ -19,15 +19,20 @@ public class PlayerAttackController : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyUp(KeyCode.X) && gameManagerController.getKunais() > 0)
-        {
-            GameObject kunai = Instantiate(kunaiPrefab, transform.position, Quaternion.identity);
-            kunai.GetComponent<KunaiController>().SetDirection(sr.flipX ? "left" : "right");
-            gameManagerController.ReduceKunai();
+        //if (Input.GetKeyUp(KeyCode.X)/* && gameManagerController.getKunais() > 0*/)
+        //{
             
-        }
+            
+        //}
         
     }
 
-    
+    public void Spell()
+    {
+        GameObject kunai = Instantiate(kunaiPrefab, transform.position, Quaternion.identity);
+        kunai.GetComponent<KunaiController>().SetDirection(sr.flipX ? "left" : "right");
+        gameManagerController.ReduceKunai();
+    }
+
+
 }

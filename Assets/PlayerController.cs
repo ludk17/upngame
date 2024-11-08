@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Security.Cryptography.X509Certificates;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class PlayerController : MonoBehaviour
     private const int ANIMATION_IDLE = 0;
     private const int ANIMATION_RUN = 1;
     private const int ANIMATION_JUMP = 2;
+    private const int ANIMATION_ATTACK = 3;
 
     private bool gravedadEstaActivada = true;
 
@@ -22,6 +24,7 @@ public class PlayerController : MonoBehaviour
     // variables para interactura
     private float velocityX = 0f;
     private bool saltar = false;
+    private bool attack = false;
 
     void Start()
     {
@@ -33,71 +36,43 @@ public class PlayerController : MonoBehaviour
         playerMessage = GameObject.Find("PlayerMessage");
 
     }
-
-    // Update is called once per frame
     void Update() {
         // // modificar el rigidibody
 
-        rb.velocity = new Vector2(velocityX, rb.velocity.y);
-        if (velocityX != 0f) {
-            animator.SetInteger("Estado", ANIMATION_RUN);
-        } else
+        if (attack == false)
         {
-            animator.SetInteger("Estado", ANIMATION_IDLE);
-        }
+            rb.velocity = new Vector2(velocityX, rb.velocity.y);
+            if (velocityX != 0f)
+            {
+                animator.SetInteger("Estado", ANIMATION_RUN);
+            }
+            else
+            {
+                animator.SetInteger("Estado", ANIMATION_IDLE);
+            }
 
-        if (velocityX > 0) {
-            sr.flipX = false;
-        } else if (velocityX < 0) {
-            sr.flipX = true;
-        }
+            if (velocityX > 0)
+            {
+                sr.flipX = false;
+            }
+            else if (velocityX < 0)
+            {
+                sr.flipX = true;
+            }
 
-        if (saltar)
+            if (saltar)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, 10);
+                animator.SetInteger("Estado", ANIMATION_JUMP);
+                saltar = false;
+            }
+
+            
+        }
+        else
         {
-            rb.velocity = new Vector2(rb.velocity.x, 10);
-            animator.SetInteger("Estado", ANIMATION_JUMP);
-            saltar = false;
+            animator.SetInteger("Estado", ANIMATION_ATTACK);
         }
-        // GetKeyUp: se ejecuta cuando se suelta la tecla
-        // GetKeyDown: se ejecuta cuando se presiona la tecla
-        // GetKey: se ejecuta mientras se mantiene presionada la tecla
-        //if (gravedadEstaActivada) {
-        //    rb.velocity = new Vector2(0, rb.velocity.y);
-        //} else {
-        //    rb.velocity = new Vector2(0, 0);
-        //}
-
-        //animator.SetInteger("Estado", ANIMATION_IDLE);
-
-        //if (Input.GetKey(KeyCode.RightArrow))
-        //{
-        //    rb.velocity = new Vector2(10, rb.velocity.y);            
-        //    sr.flipX = false;
-        //}
-
-        //if (Input.GetKey(KeyCode.LeftArrow))
-        //{
-        //    rb.velocity = new Vector2(-10, rb.velocity.y);
-        //    sr.flipX = true;
-        //}
-
-        //if (Input.GetKey(KeyCode.UpArrow) && !gravedadEstaActivada) {
-        //        rb.velocity = new Vector2(rb.velocity.x, 10);
-        //}
-
-        //if (Input.GetKey(KeyCode.DownArrow) && !gravedadEstaActivada) {
-        //    rb.velocity = new Vector2(rb.velocity.x, -10);
-        //}
-
-        //if (rb.velocity.x != 0) {
-        //    animator.SetInteger("Estado", ANIMATION_RUN);
-        //}
-
-        //if (Input.GetKeyUp(KeyCode.Space))
-        //{
-        //    rb.velocity = new Vector2(rb.velocity.x, 10);
-        //    animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
-        //}
 
     }
 
@@ -163,4 +138,13 @@ public class PlayerController : MonoBehaviour
     {
         saltar = true; 
     }
+    public void Attack()
+    {
+        attack = true;
+    }
+    public void StopAttack()
+    {
+        attack = false;
+    }
+    
 }
