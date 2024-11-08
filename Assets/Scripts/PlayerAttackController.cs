@@ -28,6 +28,10 @@ public class PlayerAttackController : MonoBehaviour
         }
         
     }
-
+    public void Atacar(){
+        GameObject kunai = Instantiate(kunaiPrefab, transform.position, Quaternion.identity);
+        kunai.GetComponent<KunaiController>().SetDirection(sr.flipX ? "left" : "right");
+        gameManagerController.ReduceKunai();
+    }
     
 }

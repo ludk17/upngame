@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private const int ANIMATION_IDLE = 0;
     private const int ANIMATION_RUN = 1;
     private const int ANIMATION_JUMP = 2;
+    private const int ANIMATION_ATTACK = 4; 
 
     private bool gravedadEstaActivada = true;
 
@@ -37,75 +38,24 @@ public class PlayerController : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-        // // modificar el rigidibody
-
-        rb.velocity = new Vector2(velocityX, rb.velocity.y);
-        
-        if (velocityX != 0) {
-            animator.SetInteger("Estado", ANIMATION_RUN);
-        } else {
-            animator.SetInteger("Estado", ANIMATION_IDLE);
-        }
-        
-        if(velocityX > 0)  {
-            sr.flipX = false;
-        } else if (velocityX < 0) {
-            sr.flipX = true;
-        }
-
-        if (saltar) {
-            rb.velocity = new Vector2(rb.velocity.x, 10);
-            animator.SetInteger("Estado", ANIMATION_JUMP);
-            saltar = false;
-        }
-        
-        
-       
-        // if (gravedadEstaActivada) {
-        //     rb.velocity = new Vector2(0, rb.velocity.y);
-        // } else {
-        //     rb.velocity = new Vector2(0, 0);
-        // }
-        
-        // animator.SetInteger("Estado", ANIMATION_IDLE);
-
-        // // GetKeyUp: se ejecuta cuando se suelta la tecla
-        // // GetKeyDown: se ejecuta cuando se presiona la tecla
-        // // GetKey: se ejecuta mientras se mantiene presionada la tecla
-        // if (Input.GetKey(KeyCode.RightArrow))
-        // {
-        //     rb.velocity = new Vector2(10, rb.velocity.y);            
-        //     sr.flipX = false;
-        // }
-
-        // // Apenas presiona la tecka -> Input.GetKeyDown
-        // // presiono la tecla -> Input.GetKey (no existe en botones)
-        // // suelto la tecla -> Input.GetKeyUp
-
-        // if (Input.GetKey(KeyCode.LeftArrow))
-        // {
-        //     rb.velocity = new Vector2(-10, rb.velocity.y);
-        //     sr.flipX = true;
-        // }
-
-        // if (Input.GetKey(KeyCode.UpArrow) && !gravedadEstaActivada) {
-        //         rb.velocity = new Vector2(rb.velocity.x, 10);
-        // }
-        
-        // if (Input.GetKey(KeyCode.DownArrow) && !gravedadEstaActivada) {
-        //     rb.velocity = new Vector2(rb.velocity.x, -10);
-        // }
-
-        // if (rb.velocity.x != 0) {
-        //     animator.SetInteger("Estado", ANIMATION_RUN);
-        // }
-
-        // if (Input.GetKeyUp(KeyCode.Space))
-        // {
-        //     rb.velocity = new Vector2(rb.velocity.x, 10);
-        //     animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
-        // }
-        
+    // Si está atacando, no se puede cambiar de animación (esto es opcional)
+    if (animator.GetInteger("Estado") == ANIMATION_ATTACK) {
+        return; // No hacer nada más si está atacando
+    }
+    
+    rb.velocity = new Vector2(velocityX, rb.velocity.y);
+    
+    if (velocityX != 0) {
+        animator.SetInteger("Estado", ANIMATION_RUN);
+    } else {
+        animator.SetInteger("Estado", ANIMATION_IDLE);
+    }
+    
+    if (saltar) {
+        rb.velocity = new Vector2(rb.velocity.x, 10);
+        animator.SetInteger("Estado", ANIMATION_JUMP);
+        saltar = false;
+    }
     }
 
     void OnCollisionEnter2D(Collision2D collision) {
@@ -168,5 +118,18 @@ public class PlayerController : MonoBehaviour
     public void WalkStop() {
         velocityX = 0;
     }
+   public void Attack() {
+    animator.SetInteger("Estado", ANIMATION_ATTACK);
+    // Después de 0.5 segundos (ajustar según la duración de tu animación), volver a Idle o Run
+    Invoke("ReturnToIdle", 0.5f); // Esto asume que la animación de ataque dura 0.5 segundos
+    }
 
+    private void ReturnToIdle() {
+    // Si el personaje no se está moviendo, regresa al estado Idle
+    if (velocityX == 0) {
+        animator.SetInteger("Estado", ANIMATION_IDLE);
+    } else {
+        animator.SetInteger("Estado", ANIMATION_RUN);
+    }
+    }
 }
