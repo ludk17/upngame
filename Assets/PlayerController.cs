@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private const int ANIMATION_IDLE = 0;
     private const int ANIMATION_RUN = 1;
     private const int ANIMATION_JUMP = 2;
+    private const int ANIMATION_ATACK = 3;
 
     private bool gravedadEstaActivada = true;
 
@@ -22,6 +23,7 @@ public class PlayerController : MonoBehaviour
     // variables para interactuar con los botones
     private float velocityX = 0f;
     private bool saltar = false;
+    private bool atacar = false;
 
 
     void Start()
@@ -32,7 +34,20 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         gameManager = GameObject.Find("GameManager");
         playerMessage = GameObject.Find("PlayerMessage");
+            animator.SetInteger("Estado", ANIMATION_IDLE);
+
         
+    }
+    private IEnumerator EsperarAnimacion() {
+        // Obtiene la duración de la animación de ataque
+        float duracion = animator.GetCurrentAnimatorStateInfo(0).length;
+        
+        // Espera la duración completa
+        yield return new WaitForSeconds(duracion);
+        
+        // Después de esperar, desactiva el ataque y cambia el estado de la animación
+        atacar = false;
+        animator.SetInteger("Estado", ANIMATION_IDLE);
     }
 
     // Update is called once per frame
@@ -41,7 +56,11 @@ public class PlayerController : MonoBehaviour
 
         rb.velocity = new Vector2(velocityX, rb.velocity.y);
         
-        if (velocityX != 0) {
+        if (atacar) {
+            animator.SetInteger("Estado", ANIMATION_ATACK);
+            atacar = false;
+        }
+        else if (velocityX != 0) {
             animator.SetInteger("Estado", ANIMATION_RUN);
         } else {
             animator.SetInteger("Estado", ANIMATION_IDLE);
@@ -167,6 +186,12 @@ public class PlayerController : MonoBehaviour
     
     public void WalkStop() {
         velocityX = 0;
+    }
+    public void PlayerAtack() {
+        // Mi mov
+        atacar = true;
+        animator.SetInteger("Estado", ANIMATION_ATACK);
+        StartCoroutine(EsperarAnimacion());
     }
 
 }
