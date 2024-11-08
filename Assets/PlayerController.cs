@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour
     // variables para interactuar con los botones
     private float velocityX = 0f;
     private bool saltar = false;
+     // Prefab del Kunai
+    public GameObject kunaiPrefab;
+    public Transform kunaiSpawnPoint;
 
 
     void Start()
@@ -167,6 +170,16 @@ public class PlayerController : MonoBehaviour
     
     public void WalkStop() {
         velocityX = 0;
+    }
+    public void ThrowKunai() {
+        if (kunaiPrefab != null && kunaiSpawnPoint != null) {
+            GameObject kunai = Instantiate(kunaiPrefab, kunaiSpawnPoint.position, kunaiSpawnPoint.rotation);
+            Rigidbody2D kunaiRb = kunai.GetComponent<Rigidbody2D>();
+
+            // Asignar una velocidad al Kunai dependiendo de la dirección del jugador
+            float direction = sr.flipX ? -1 : 1;
+            kunaiRb.velocity = new Vector2(10 * direction, 0);
+        }
     }
 
 }
