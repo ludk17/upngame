@@ -24,6 +24,13 @@ public class PlayerController : MonoBehaviour
     // Flags para los botones
     private bool moveLeft = false;
     private bool moveRight = false;
+    // Start is called before the first frame update
+
+    // variables para interactuar con los botones
+    private float velocityX = 0f;
+    private bool saltar = false;
+
+
     void Start()
     {
         // acceder a rigidbody
@@ -38,11 +45,14 @@ public class PlayerController : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-       
-        if (gravedadEstaActivada) {
-            rb.velocity = new Vector2(0, rb.velocity.y);
+        // // modificar el rigidibody
+
+        rb.velocity = new Vector2(velocityX, rb.velocity.y);
+        
+        if (velocityX != 0) {
+            animator.SetInteger("Estado", ANIMATION_RUN);
         } else {
-            rb.velocity = new Vector2(0, 0);
+            animator.SetInteger("Estado", ANIMATION_IDLE);
         }
         
         animator.SetInteger("Estado", ANIMATION_IDLE);
@@ -67,25 +77,30 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector2(10, rb.velocity.y);            
             sr.flipX = false;
-        }
-
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            rb.velocity = new Vector2(-10, rb.velocity.y);
+        } else if (velocityX < 0) {
             sr.flipX = true;
         }
 
         if (Input.GetKey(KeyCode.UpArrow) && !gravedadEstaActivada) {
                 rb.velocity = new Vector2(rb.velocity.x, 10);            
         }
+       
+        // if (gravedadEstaActivada) {
+        //     rb.velocity = new Vector2(0, rb.velocity.y);
+        // } else {
+        //     rb.velocity = new Vector2(0, 0);
+        // }
         
-        if (Input.GetKey(KeyCode.DownArrow) && !gravedadEstaActivada) {
-            rb.velocity = new Vector2(rb.velocity.x, -10);
-        }
+        // animator.SetInteger("Estado", ANIMATION_IDLE);
 
-        if (rb.velocity.x != 0) {
-            animator.SetInteger("Estado", ANIMATION_RUN);
-        }
+        // // GetKeyUp: se ejecuta cuando se suelta la tecla
+        // // GetKeyDown: se ejecuta cuando se presiona la tecla
+        // // GetKey: se ejecuta mientras se mantiene presionada la tecla
+        // if (Input.GetKey(KeyCode.RightArrow))
+        // {
+        //     rb.velocity = new Vector2(10, rb.velocity.y);            
+        //     sr.flipX = false;
+        // }
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
@@ -107,7 +122,7 @@ public class PlayerController : MonoBehaviour
 
     public void Jump()
     {
-        if (gravedadEstaActivada && rb.velocity.y == 0) // Salta solo si está en el suelo
+        if (gravedadEstaActivada && rb.velocity.y == 0) // Salta solo si estï¿½ en el suelo
         {
             audioSource.PlayOneShot(jumpsound);
             rb.velocity = new Vector2(rb.velocity.x, 10);
@@ -158,6 +173,22 @@ public class PlayerController : MonoBehaviour
 
     private void HideMessage() {
         playerMessage.GetComponent<TextMeshProUGUI>().text = "";
+    }
+
+    public void Jump() {
+        saltar = true;
+    }
+
+    public void WalkRight() {
+        velocityX = 10;
+    }
+
+    public void WalkLeft() {
+        velocityX = -10;
+    }
+    
+    public void WalkStop() {
+        velocityX = 0;
     }
 
 }
