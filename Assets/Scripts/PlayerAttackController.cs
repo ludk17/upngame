@@ -21,13 +21,14 @@ public class PlayerAttackController : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.X) && gameManagerController.getKunais() > 0)
         {
-            GameObject kunai = Instantiate(kunaiPrefab, transform.position, Quaternion.identity);
-            kunai.GetComponent<KunaiController>().SetDirection(sr.flipX ? "left" : "right");
-            gameManagerController.ReduceKunai();
-            
+            FirstAttack();            
         }
         
     }
 
-    
+    public void FirstAttack () {
+        GameObject kunai = Instantiate(kunaiPrefab, transform.position, Quaternion.identity);
+        kunai.GetComponent<KunaiController>().SetDirection(sr.flipX ? "left" : "right");
+        gameManagerController.ReduceKunai();
+    }
 }

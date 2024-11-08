@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     private const int ANIMATION_IDLE = 0;
     private const int ANIMATION_RUN = 1;
     private const int ANIMATION_JUMP = 2;
+    private const int ANIMATION_CORTAR = 3;
+
 
     private bool gravedadEstaActivada = true;
 
@@ -22,6 +24,8 @@ public class PlayerController : MonoBehaviour
     // variables para interactuar con los botones
     private float velocityX = 0f;
     private bool saltar = false;
+    private bool cortar = false;
+    private bool disparar = false;
 
 
     void Start()
@@ -32,7 +36,6 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         gameManager = GameObject.Find("GameManager");
         playerMessage = GameObject.Find("PlayerMessage");
-        
     }
 
     // Update is called once per frame
@@ -59,7 +62,10 @@ public class PlayerController : MonoBehaviour
             saltar = false;
         }
         
-        
+        if (cortar) {
+            animator.SetInteger("Estado", ANIMATION_CORTAR);
+            cortar = false;
+        }
        
         // if (gravedadEstaActivada) {
         //     rb.velocity = new Vector2(0, rb.velocity.y);
@@ -155,6 +161,10 @@ public class PlayerController : MonoBehaviour
 
     public void Jump() {
         saltar = true;
+    }
+
+    public void Espadazo() {
+        cortar = true;
     }
 
     public void WalkRight() {
