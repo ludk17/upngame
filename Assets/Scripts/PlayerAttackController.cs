@@ -6,6 +6,9 @@ public class PlayerAttackController : MonoBehaviour
 {
     public GameObject kunaiPrefab;   
     private GameManagerController gameManagerController;
+    private bool kunai = false;
+    public float cooldownTime = 1f; 
+    private float lastThrowTime;
 
     SpriteRenderer sr;
     // Start is called before the first frame update
@@ -19,15 +22,26 @@ public class PlayerAttackController : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyUp(KeyCode.X) && gameManagerController.getKunais() > 0)
+        if (kunai && Time.time >= lastThrowTime + cooldownTime)
         {
             GameObject kunai = Instantiate(kunaiPrefab, transform.position, Quaternion.identity);
             kunai.GetComponent<KunaiController>().SetDirection(sr.flipX ? "left" : "right");
             gameManagerController.ReduceKunai();
-            
+
+            lastThrowTime = Time.time;
+            End();
         }
-        
+
+
     }
 
-    
+    public void LanzarKunai()
+    {
+        kunai = true;
+    }
+
+    public void End()
+    {
+        kunai = false;
+    }
 }

@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private const int ANIMATION_IDLE = 0;
     private const int ANIMATION_RUN = 1;
     private const int ANIMATION_JUMP = 2;
+    private const int ANIMATION_ATAQUE = 4;
 
     private bool gravedadEstaActivada = true;
 
@@ -22,6 +23,7 @@ public class PlayerController : MonoBehaviour
     // variables para interactuar con los botones
     private float velocityX = 0f;
     private bool saltar = false;
+    private bool ataque = false;
 
 
     void Start()
@@ -58,15 +60,20 @@ public class PlayerController : MonoBehaviour
             animator.SetInteger("Estado", ANIMATION_JUMP);
             saltar = false;
         }
-        
-        
-       
+
+        if (ataque)
+        {
+            animator.SetInteger("Estado", ANIMATION_ATAQUE);
+            ataque = false;
+        }
+
+
         // if (gravedadEstaActivada) {
         //     rb.velocity = new Vector2(0, rb.velocity.y);
         // } else {
         //     rb.velocity = new Vector2(0, 0);
         // }
-        
+
         // animator.SetInteger("Estado", ANIMATION_IDLE);
 
         // // GetKeyUp: se ejecuta cuando se suelta la tecla
@@ -91,7 +98,7 @@ public class PlayerController : MonoBehaviour
         // if (Input.GetKey(KeyCode.UpArrow) && !gravedadEstaActivada) {
         //         rb.velocity = new Vector2(rb.velocity.x, 10);
         // }
-        
+
         // if (Input.GetKey(KeyCode.DownArrow) && !gravedadEstaActivada) {
         //     rb.velocity = new Vector2(rb.velocity.x, -10);
         // }
@@ -105,7 +112,7 @@ public class PlayerController : MonoBehaviour
         //     rb.velocity = new Vector2(rb.velocity.x, 10);
         //     animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
         // }
-        
+
     }
 
     void OnCollisionEnter2D(Collision2D collision) {
@@ -167,6 +174,10 @@ public class PlayerController : MonoBehaviour
     
     public void WalkStop() {
         velocityX = 0;
+    }
+
+    public void Ataque() { 
+        ataque = true;
     }
 
 }
