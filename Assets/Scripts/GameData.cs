@@ -7,7 +7,7 @@ public class GameData
 {
     public int score = 0;
     public int lives = 3;
-    public int kunais = 0;
+    public int kunais = 20;
 
     public int posiones = 0;
     public int llaves = 0;
@@ -17,7 +17,7 @@ public class GameData
 
     public bool llaveCalabozo = false;
 
-    public bool tieneEspada = false;
+    public bool tieneEspada = true;
     public bool tieneDobleSalto = false;
     public bool tieneDash = false;
     public bool tieneDobleDanio = false;
