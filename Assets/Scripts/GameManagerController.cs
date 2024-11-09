@@ -70,7 +70,7 @@ public class GameManagerController : MonoBehaviour
         
         kunaisText.text = "Kunais: " + gData.kunais;
         if (gData.lives == 0) {
-            Debug.Log("Game Over");
+            //Debug.Log("Game Over");
         }
     }
 }
