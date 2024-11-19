@@ -5,9 +5,12 @@ using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
+    public AudioClip jumpsound;    
+
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer sr;
+    private AudioSource audioSource;
 
     private const int ANIMATION_IDLE = 0;
     private const int ANIMATION_RUN = 1;
@@ -17,6 +20,10 @@ public class PlayerController : MonoBehaviour
 
     private GameObject gameManager;
     private GameObject playerMessage;
+
+    // Flags para los botones
+    private bool moveLeft = false;
+    private bool moveRight = false;
     // Start is called before the first frame update
 
     // variables para interactuar con los botones
@@ -32,6 +39,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         gameManager = GameObject.Find("GameManager");
         playerMessage = GameObject.Find("PlayerMessage");
+        audioSource = gameManager.AddComponent<AudioSource>();
         
     }
 
@@ -47,19 +55,35 @@ public class PlayerController : MonoBehaviour
             animator.SetInteger("Estado", ANIMATION_IDLE);
         }
         
-        if(velocityX > 0)  {
+        animator.SetInteger("Estado", ANIMATION_IDLE);
+
+        // Movimiento hacia la derecha
+        if (moveRight)
+        {
+            rb.velocity = new Vector2(10, rb.velocity.y);
+            sr.flipX = false;
+            animator.SetInteger("Estado", ANIMATION_RUN);
+        }
+
+        // Movimiento hacia la izquierda
+        if (moveLeft)
+        {
+            rb.velocity = new Vector2(-10, rb.velocity.y);
+            sr.flipX = true;
+            animator.SetInteger("Estado", ANIMATION_RUN);
+        }
+
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            rb.velocity = new Vector2(10, rb.velocity.y);            
             sr.flipX = false;
         } else if (velocityX < 0) {
             sr.flipX = true;
         }
 
-        if (saltar) {
-            rb.velocity = new Vector2(rb.velocity.x, 10);
-            animator.SetInteger("Estado", ANIMATION_JUMP);
-            saltar = false;
+        if (Input.GetKey(KeyCode.UpArrow) && !gravedadEstaActivada) {
+                rb.velocity = new Vector2(rb.velocity.x, 10);            
         }
-        
-        
        
         // if (gravedadEstaActivada) {
         //     rb.velocity = new Vector2(0, rb.velocity.y);
@@ -78,34 +102,32 @@ public class PlayerController : MonoBehaviour
         //     sr.flipX = false;
         // }
 
-        // // Apenas presiona la tecka -> Input.GetKeyDown
-        // // presiono la tecla -> Input.GetKey (no existe en botones)
-        // // suelto la tecla -> Input.GetKeyUp
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            audioSource.PlayOneShot(jumpsound);
+            rb.velocity = new Vector2(rb.velocity.x, 10);            
+            animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando            
+        }        
+    }
 
-        // if (Input.GetKey(KeyCode.LeftArrow))
-        // {
-        //     rb.velocity = new Vector2(-10, rb.velocity.y);
-        //     sr.flipX = true;
-        // }
+    public void MoveLeft(bool isPressed)
+    {
+        moveLeft = isPressed;
+    }
 
-        // if (Input.GetKey(KeyCode.UpArrow) && !gravedadEstaActivada) {
-        //         rb.velocity = new Vector2(rb.velocity.x, 10);
-        // }
-        
-        // if (Input.GetKey(KeyCode.DownArrow) && !gravedadEstaActivada) {
-        //     rb.velocity = new Vector2(rb.velocity.x, -10);
-        // }
+    public void MoveRight(bool isPressed)
+    {
+        moveRight = isPressed;
+    }
 
-        // if (rb.velocity.x != 0) {
-        //     animator.SetInteger("Estado", ANIMATION_RUN);
-        // }
-
-        // if (Input.GetKeyUp(KeyCode.Space))
-        // {
-        //     rb.velocity = new Vector2(rb.velocity.x, 10);
-        //     animator.SetInteger("Estado", ANIMATION_JUMP); // no esta funcionando
-        // }
-        
+    public void Jump()
+    {
+        if (gravedadEstaActivada && rb.velocity.y == 0) // Salta solo si est� en el suelo
+        {
+            audioSource.PlayOneShot(jumpsound);
+            rb.velocity = new Vector2(rb.velocity.x, 10);
+            animator.SetInteger("Estado", ANIMATION_JUMP);
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision) {

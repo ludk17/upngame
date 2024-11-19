@@ -9,7 +9,7 @@ public class GameManagerController : MonoBehaviour
 {
     private GameData gData;
     private GameDataRepository gDataRepository;
-
+   
     // private int score = 0;
     // private int lives = 3;
 
@@ -35,6 +35,12 @@ public class GameManagerController : MonoBehaviour
     public void RemoveLife()
     {
         gData.lives--;
+        gDataRepository.SaveGame(gData);
+    }
+
+    public void AddLife()
+    {
+        gData.lives++;
         gDataRepository.SaveGame(gData);
     }
 
